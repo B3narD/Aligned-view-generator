@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 from mpl_toolkits.mplot3d import Axes3D
-
+from utils.rotWithPCA import rotWithPCA
 def show3DposePair(realt3d, faket3d, ax, lcolor="#3498db", rcolor="#e74c3c", add_labels=True,
                    gt=True, pred=False):  # blue, orange
   """
@@ -32,6 +32,8 @@ def show3DposePair(realt3d, faket3d, ax, lcolor="#3498db", rcolor="#e74c3c", add
     # Make connection matrix
     for i in np.arange(len(I)):
       x, y, z = [np.array([vals[I[i], j], vals[J[i], j]]) for j in range(3)]
+      # x = [vals[I[i], 0], vals[J[i], 0]] ...
+      # x, y and z are expressed by axis vectors
       if idx == 0:
         ax.plot(x, z, -y, lw=2, c='k')
       #        ax.plot(x,y, z,  lw=2, c='k')
@@ -78,7 +80,7 @@ def show3DposePair(realt3d, faket3d, ax, lcolor="#3498db", rcolor="#e74c3c", add
 
 
 def show3Dpose(channels, ax, lcolor="#3498db", rcolor="#e74c3c", add_labels=True,
-               gt=False,pred=False): # blue, orange
+               gt=False,pred=False, rot=False): # blue, orange
     """
     Visualize a 3d skeleton
 
@@ -93,15 +95,23 @@ def show3Dpose(channels, ax, lcolor="#3498db", rcolor="#e74c3c", add_labels=True
     """
 
     #   assert channels.size == len(data_utils.H36M_NAMES)*3, "channels should have 96 entries, it has %d instead" % channels.size
-    vals = np.reshape( channels, (16, -1) )
+    vals = np.reshape(channels, (16, -1) )
+
+    # 2x3 * 3x16
+    #filterMat = np.array([[1, 0, 0], [0, 1, 0]])
+    if rot == True:
+        vals = rotWithPCA(vals)
 
     I  = np.array([0,1,2,0,4,5,0,7,8,8,10,11,8,13,14]) # start points
     J  = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]) # end points
     LR = np.array([1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1], dtype=bool)
-
+    # r = [np.array([vals[8, i], vals[10, i]]) for i in range(3)]
+    # l = [np.array([vals[8, i], vals[13, i]]) for i in range(3)]
     # Make connection matrix
     for i in np.arange( len(I) ):
         x, y, z = [np.array( [vals[I[i], j], vals[J[i], j]] ) for j in range(3)]
+        #np.concatenate((Set, np.concatenate((x, y, z), axis=0)), axis=1)
+        print("x, y, z:", x, y, z)
         if gt:
             ax.plot(x,z, -y,  lw=2, c='k')
         #        ax.plot(x,y, z,  lw=2, c='k')
@@ -211,3 +221,4 @@ def wrap_show2d_pose(vals2d):
     ax2d = plt.axes()
     show2Dpose(vals2d, ax2d)
     plt.show()
+

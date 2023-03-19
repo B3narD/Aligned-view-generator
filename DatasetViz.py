@@ -25,7 +25,7 @@ if __name__ == "__main__":
     poses_train, poses_train_2d, actions_train, cams_train = fetch(subjects_train, dataset, keypoints)
     train_gt2d3d_loader = DataLoader(PoseDataSet(poses_train, poses_train_2d, actions_train, cams_train),
                                      batch_size=batch_size,
-                                     shuffle=True, num_workers=4, pin_memory=True)
+                                     shuffle=True, num_workers=2, pin_memory=True)
 
     for i, (inputs_3d, _, _, cam_param) in enumerate(train_gt2d3d_loader):
         inputs_3d, cam_param = inputs_3d.to(device), cam_param.to(device)
@@ -34,11 +34,15 @@ if __name__ == "__main__":
         fig3d = plt.figure(figsize=(16, 8))
 
         # input 3D
-        ax3din = fig3d.add_subplot(1, 2, 1, projection='3d')
-        ax3din.set_title('input 3D')
-        show3Dpose(inputs_3d.cpu().detach().numpy()[0], ax3din, gt=True)
+        ax3din1 = fig3d.add_subplot(1, 3, 1, projection='3d')
+        ax3din1.set_title('input 3D')
+        show3Dpose(inputs_3d.cpu().detach().numpy()[0], ax3din1, gt=True)
 
-        ax2din = fig3d.add_subplot(1, 2, 2)
+        ax3din2 = fig3d.add_subplot(1, 3, 2, projection='3d')
+        ax3din2.set_title('rotate 3D')
+        show3Dpose(inputs_3d.cpu().detach().numpy()[0], ax3din2, pred=True, rot=True)
+
+        ax2din = fig3d.add_subplot(1, 3, 3)
         ax2din.set_title('input 2d')
         show2Dpose(inputs_2d.cpu().detach().numpy()[0], ax2din)
 
@@ -46,3 +50,5 @@ if __name__ == "__main__":
         img_name = "./data_viz/sample{}".format(i + 1)
         plt.savefig(img_name)
         plt.close("all")
+        if i == 10:
+            break
