@@ -9,14 +9,16 @@ from shutil import rmtree
 
 import sys
 
-sys.path.append('../')
 
+
+sys.path.append('../')
+from utils.pcaLoader import rotPCALoader
 from common.h36m_dataset import Human36mDataset
 from common.camera import world_to_camera, project_to_2d, image_coordinates
 from utils.utils import wrap
 
-output_filename = 'data_3d_h36m'
-output_filename_2d = 'data_2d_h36m_gt'
+output_filename = 'data_3d_h36m_PCA'
+output_filename_2d = 'data_2d_h36m_gt_PCA'
 subjects = ['S1', 'S5', 'S6', 'S7', 'S8', 'S9', 'S11']
 
 if __name__ == '__main__':
@@ -120,7 +122,8 @@ if __name__ == '__main__':
 
             positions_2d = []
             for cam in anim['cameras']:
-                pos_3d = world_to_camera(anim['positions'], R=cam['orientation'], t=cam['translation'])
+                pos_3d = rotPCALoader(anim['positions'], cam['orientation'])
+                pos_3d = world_to_camera(pos_3d, R=cam['orientation'], t=cam['translation'])
                 pos_2d = wrap(project_to_2d, True, pos_3d, cam['intrinsic'])
                 pos_2d_pixel_space = image_coordinates(pos_2d, w=cam['res_w'], h=cam['res_h'])
                 positions_2d.append(pos_2d_pixel_space.astype('float32'))
