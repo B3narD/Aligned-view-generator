@@ -33,4 +33,4 @@ python DatasetViz.py
 
 
 ### Rotation of camera:
-The method applied virtual cameras with their orientations straight forward to human orientation, obtained by PCA. This process was completed Hua. 
+The method applied virtual cameras with their orientations straight forward to human orientation, obtained by PCA. This process was completed Hua. #TODO: complete dataset generating of this approach.
