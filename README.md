@@ -11,7 +11,8 @@ The method contains two steps.
 - 2) Second, calculate the rotation axis of orientation of human and camera orientation. Then, rotate human in world space to face to camera to achieve the *aligned-view* by simply using Rodrigues'.
 
 ![demo](data_viz/demo.gif)
-~\\To obtain H36M dataset, please download from [Google Drive](https://drive.google.com/drive/folders/1c7Iz6Tt7qbaw0c1snKgcGOD-JGSzuZ4X)
+
+To obtain H36M dataset, please download from [Google Drive](https://drive.google.com/drive/folders/1c7Iz6Tt7qbaw0c1snKgcGOD-JGSzuZ4X)
 
 To generate 2D dataset:
 <pre>
