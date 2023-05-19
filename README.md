@@ -3,7 +3,7 @@ In 3D Human Pose Estimation (3D HPE), the typical input is 2D images, which migh
 
 In such cases, for better 3D pose estimation, we need a mechanism to "see through" this occlusion and generate an unobstructed image as input, which is referred to as the "aligned-view".
 
-Our aligned-view generator is based on PoseAug. In order to obtain such *aligned-view* projections, we've applied PCA on original 3D keypoints from Human3.6M dataset. Two methods to apply this transformation has been completed, but still have certain amount of issuses within.
+Our aligned-view generator is based on [PoseAug](https://github.com/jfzhang95/PoseAug). In order to obtain such *aligned-view* projections, we've applied PCA on original 3D keypoints from Human3.6M dataset. Two methods to apply this transformation has been completed, but still have certain amount of issuses within.
 
 ### Rotation of 3D:
 The method contains two steps.
